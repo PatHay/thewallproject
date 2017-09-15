@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+        crossorigin="anonymous"><title>Friends</title>
+    <style>
+    
+    body{
+        height: 100%;
+        width: 100%;
+        background-color: grey;
+    }
+    .messages{
+        width: 80%;
+        margin: 20px;
+    }
+    .comments{
+        width: 80%;
+        padding: 10px;
+    }
+    #welcome{
+        display: inline-block;
+        width: 40%;
+    }
+    #user{
+        display: inline-block;
+        width: 50%;
+        text-align: right;
+    }
+    #logout{
+        display: inline-block;
+        width: 5%;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3">Welcome to the Coding Dojo Wall!</h1>
+            <p class="lead">Hi, {{ name }}
+                <form action='/posting' method='post' id="logout">
+                    <input type="hidden" name="action" value="logout">
+                    <input type='submit' value='Logout'>
+                </form>
+            </p>
+        </div>
+    </div>
+    <hr>
+        {% for message in all_messages: %}
+        <div class='messages'>
+        <h2>{{ message['first_name'] }} {{ message['last_name'] }}- {{ message['created_at'] }}</h2>
+            <p>{{ message['message'] }}</p>
+            <form action='/posting' method='post'>
+                <input type="hidden" name ="action" value = "delete_post">
+                <input type="hidden" name ="message_id" value= {{ message['id'] }}>                
+                    <p><input type = 'submit' value = 'Delete this message'></p>
+            </form>
+                    {% for comment in all_comments %}
+                    {% if comment['message_id'] == message['id'] %}
+                    <div class='comments'>
+                    <h4>{{ comment['first_name'] }} {{ comment['last_name'] }}- {{ comment['created_at'] }}</h4>
+                        <p2>{{ comment['comment'] }}</p2>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+            <form action='/posting' method='post'>
+                <input type="hidden" name ="action" value = "comment">
+                <input type="hidden" name ="message_id" value= {{ message['id'] }}>
+                <h4>Post a comment</h4>
+                <textarea rows ='4' cols="60" name = "comment"></textarea>
+                <p><input type = 'submit' value = 'Post a comment'></p>
+            </form>
+        </div>
+        {% endfor %}
+    <form action='/posting' method='post'>
+        <input type="hidden" name ="action" value = "posts">
+        <h4>Post a message</h4>
+            <textarea rows ='6' cols="70" name = "message"></textarea>
+            <p><input type = 'submit' value = 'Post a message'></p>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>
+
+</html>
